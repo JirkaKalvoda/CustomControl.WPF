@@ -1,0 +1,30 @@
+﻿<Window x:Class="CustomControlTest.Control.ConvertUnitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomControlTest.Control"
+        xmlns:vm="clr-namespace:CustomControlTest.ViewModel"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:ConvertUnitViewModel}"
+        Title="单位转换控件" Height="450" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Grid.Column="0" Margin="5" Header="单一单位">
+            <ContentControl Content="{Binding LengthUnitControl}"></ContentControl>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="0" Margin="5" Header="复合单位">
+            <ContentControl Content="{Binding VelocityUnitControl}"></ContentControl>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Grid.Column="0" Margin="5" Header="复合单位分开设置">
+            <ContentControl Content="{Binding VelocityUnitSeparateControl}"></ContentControl>
+        </GroupBox>
+    </Grid>
+</Window>
