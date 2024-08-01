@@ -15,19 +15,5 @@ namespace CustomControl.Model
             UnitRatioList.Add(new UnitRatioItem<LengthUnit>(LengthUnit.Km, 1000d));
             UnitRatioList.Add(new UnitRatioItem<LengthUnit>(LengthUnit.Mile, 1609.344d));
         }
-
-        /// <summary>
-        /// 单位换算
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="unitIn"></param>
-        /// <param name="unitOut"></param>
-        /// <returns></returns>
-        public double ConvertUnit(double input, LengthUnit unitIn, LengthUnit unitOut)
-        {
-            double ratioIn = UnitRatioList.First(o => o.Unit == unitIn).Ratio;
-            double ratioOut = UnitRatioList.First(o => o.Unit == unitOut).Ratio;
-            return input * ratioIn / ratioOut;
-        }
     }
 }
