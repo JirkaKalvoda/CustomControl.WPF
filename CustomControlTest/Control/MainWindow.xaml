@@ -28,5 +28,6 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Margin="5" Content="单位转换控件" Command="{Binding OpenConvertUnitWindowCommand}"></Button>
+        <Button Grid.Row="0" Grid.Column="1" Margin="5" Content="树状图控件" Command="{Binding OpenTreeViewWindowCommand}"></Button>
     </Grid>
 </Window>

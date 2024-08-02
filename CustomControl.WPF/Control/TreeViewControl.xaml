@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="CustomControl.Control.TreeViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CustomControl.Control"
+             xmlns:vm="clr-namespace:CustomControl.ViewModel"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:TreeViewViewModel}"
+             d:DesignHeight="450" d:DesignWidth="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Margin="5" Text="{Binding SearchKeyword}"></TextBox>
+            <Button Grid.Column="1" Margin="5" Content="搜索1" Command="{Binding Search1Command}" ToolTip="不显示不符合的子项"></Button>
+            <Button Grid.Column="2" Margin="5" Content="搜索2" Command="{Binding Search2Command}" ToolTip="显示不符合的子项"></Button>
+            <Button Grid.Column="3" Margin="5" Content="清除搜索" Command="{Binding SearchClearCommand}"></Button>
+        </Grid>
+        <TreeView Grid.Row="1" Width="400" HorizontalAlignment="Left" ItemsSource="{Binding Data}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="True"/>
+                    <Setter Property="Visibility" Value="{Binding Show}"></Setter>
+                    <!--禁止双击折叠/展开，但是防不住4连击-->
+                    <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_OnMouseDoubleClick"></EventSetter>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+    </Grid>
+</UserControl>
