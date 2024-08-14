@@ -16,6 +16,12 @@ namespace CustomControl.ViewModel
         [ObservableProperty]
         private string searchKeyword;
 
+        [ObservableProperty]
+        private Brush selectedForeground;
+        
+        [ObservableProperty]
+        private Brush selectedBackground;
+
         public TreeViewViewModel()
         {
             TreeViewItemViewModel node1 = new TreeViewItemViewModel()
@@ -62,6 +68,11 @@ namespace CustomControl.ViewModel
                 Text = "Layer 4 Node 2",
                 TextTranslate = "层4节点2",
             };
+            TreeViewItemViewModel node9 = new TreeViewItemViewModel()
+            {
+                Text = "Layer 1 Node 2",
+                TextTranslate = "层1节点2",
+            };
             node1.Nodes.Add(node2);
             node1.Nodes.Add(node3);
             node2.Nodes.Add(node4);
@@ -79,7 +90,11 @@ namespace CustomControl.ViewModel
             Data = new List<TreeViewItemViewModel>()
             {
                 node1,
+                node9,
             };
+            SelectedForeground = new SolidColorBrush(Color.FromArgb(0xff, 0xff, 0xff, 0xff));
+            //SelectedBackground = new SolidColorBrush(Color.FromArgb(0xff, 0x00, 0x78, 0xd7));
+            SelectedBackground = new SolidColorBrush(Color.FromArgb(0xff, 0x55, 0x78, 0x00));
         }
 
         private FrameworkElement element;

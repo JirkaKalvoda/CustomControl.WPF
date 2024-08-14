@@ -7,41 +7,115 @@
              xmlns:vm="clr-namespace:CustomControl.ViewModel"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance vm:TreeViewViewModel}"
-             d:DesignHeight="450" d:DesignWidth="400">
+             d:DesignHeight="450" d:DesignWidth="700"
+             >
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Margin="5" Text="{Binding SearchKeyword}"></TextBox>
-            <Button Grid.Column="1" Margin="5" Content="搜索1" Command="{Binding Search1Command}" ToolTip="不显示不符合的子项"></Button>
-            <Button Grid.Column="2" Margin="5" Content="搜索2" Command="{Binding Search2Command}" ToolTip="显示不符合的子项"></Button>
-            <Button Grid.Column="3" Margin="5" Content="清除搜索" Command="{Binding SearchClearCommand}"></Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Margin="5" Text="{Binding SearchKeyword}"></TextBox>
+                <Button Grid.Column="1" Margin="5" Content="搜索1" Command="{Binding Search1Command}" ToolTip="不显示不符合的子项"></Button>
+                <Button Grid.Column="2" Margin="5" Content="搜索2" Command="{Binding Search2Command}" ToolTip="显示不符合的子项"></Button>
+                <Button Grid.Column="3" Margin="5" Content="清除搜索" Command="{Binding SearchClearCommand}"></Button>
+            </Grid>
+            <TreeView Grid.Row="1" ItemsSource="{Binding Data}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
+                        </DockPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem" >
+                        <!--Resources不支持Binding-->
+                        <Style.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"></SolidColorBrush>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="GreenYellow"></SolidColorBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <!--无效-->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Red"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter Property="Background" Value="White"></Setter>
+                            </Trigger>
+                            <!--有效-->
+                            <!--<Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Red"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter Property="Background" Value="Green"></Setter>
+                            </Trigger>-->
+                        </Style.Triggers>
+                        <Setter Property="IsExpanded" Value="True"/>
+                        <Setter Property="Visibility" Value="{Binding Show}"></Setter>
+                        <!--禁止双击折叠/展开，但是防不住4连击-->
+                        <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_OnMouseDoubleClick"></EventSetter>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
         </Grid>
-        <TreeView Grid.Row="1" Width="400" HorizontalAlignment="Left" ItemsSource="{Binding Data}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>
-                        <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="IsExpanded" Value="True"/>
-                    <Setter Property="Visibility" Value="{Binding Show}"></Setter>
-                    <!--禁止双击折叠/展开，但是防不住4连击-->
-                    <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_OnMouseDoubleClick"></EventSetter>
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <local:TreeViewMultiSelect Grid.Row="0" ItemsSource="{Binding Data}" IsMultiSelect="True"
+                                       DefaultItemBackground="#ffffffff"
+                                       DefaultItemForeground="#ff000000"
+                                       DefaultItemBorderBrush="#ff000000"
+                                       DefaultItemBorderThickness="0"
+                                       SelectedItemBackground="{Binding SelectedBackground}"
+                                       SelectedItemForeground="{Binding SelectedForeground}"
+                                       SelectedItemBorderBrush="#ff000000"
+                                       SelectedItemBorderThickness="0"
+                                       >
+                <!--依赖属性里套依赖属性绑定不传值，但是传字符串正常-->
+                <!--<local:TreeViewMultiSelect.DefaultItemStyle>
+                    <local:TreeViewItemStyle Foreground="#ff000000" Background="#ffffffff" BorderBrush="#ff000000" BorderThickness="0"></local:TreeViewItemStyle>
+                </local:TreeViewMultiSelect.DefaultItemStyle>
+                <local:TreeViewMultiSelect.SelectedItemStyle>
+                    <local:TreeViewItemStyle Foreground="{Binding SelectedForeground, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedBackground}" BorderBrush="#ff000000" BorderThickness="0"></local:TreeViewItemStyle>
+                </local:TreeViewMultiSelect.SelectedItemStyle>-->
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
+                        </DockPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="True"/>
+                        <Style.Triggers>
+                            <!--无效-->
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="{Binding DataContext.SelectedForeground, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:TreeViewControl}}}"></Setter>
+                                <Setter Property="Background" Value="{Binding DataContext.SelectedBackground, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:TreeViewControl}}}"></Setter>
+                                <Setter Property="BorderBrush" Value="#ff000000"></Setter>
+                                <Setter Property="BorderThickness" Value="0"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </local:TreeViewMultiSelect>
+        </Grid>
     </Grid>
 </UserControl>

@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:CustomControlTest.ViewModel"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:TreeViewWindowViewModel}"
-        Title="树状图控件" Height="450" Width="400"
+        Title="树状图控件" Height="450" Width="700"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         >
