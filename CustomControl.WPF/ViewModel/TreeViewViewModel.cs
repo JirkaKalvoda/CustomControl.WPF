@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -95,6 +97,16 @@ namespace CustomControl.ViewModel
             SelectedForeground = new SolidColorBrush(Color.FromArgb(0xff, 0xff, 0xff, 0xff));
             //SelectedBackground = new SolidColorBrush(Color.FromArgb(0xff, 0x00, 0x78, 0xd7));
             SelectedBackground = new SolidColorBrush(Color.FromArgb(0xff, 0x55, 0x78, 0x00));
+
+            PropertyChanged += TreeViewViewModel_PropertyChanged;
+        }
+
+        private void TreeViewViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Data))
+            {
+                RefreshTreeViewLeft();
+            }
         }
 
         private FrameworkElement element;
@@ -276,6 +288,49 @@ namespace CustomControl.ViewModel
                 }
             }
         }
+
+        /// <summary>
+        /// 加载后、折叠、展开、数据变动 刷新左对齐按钮
+        /// </summary>
+        public void RefreshTreeViewLeft()
+        {
+            Grid g = (element as TreeViewControl).G_tvLeft;
+            if (g != null)
+            {
+                g.RowDefinitions.Clear();
+                g.Children.Clear();
+                foreach (TreeViewItemViewModel item in Data)
+                {
+                    ScanTreeViewData(item, g);
+                }
+            }
+        }
+
+        private void ScanTreeViewData(TreeViewItemViewModel item, Grid g)
+        {
+            if (item != null)
+            {
+                RowDefinition rd = new RowDefinition();
+                rd.Height = new GridLength(24, GridUnitType.Pixel);
+                g.RowDefinitions.Add(rd);
+                if (item.ShowButton == Visibility.Visible)
+                {
+                    Button b = new Button();
+                    b.Height = 20;
+                    b.Width = 20;
+                    b.Margin = new Thickness(2);
+                    g.Children.Add(b);
+                    Grid.SetRow(b, g.RowDefinitions.Count - 1);
+                }
+                if (item.IsExpanded && item.Nodes != null && item.Nodes.Count > 0)
+                {
+                    foreach (TreeViewItemViewModel node in item.Nodes)
+                    {
+                        ScanTreeViewData(node, g);
+                    }
+                }
+            }
+        }
     }
 
     public partial class TreeViewItemViewModel : ObservableObject
@@ -314,6 +369,9 @@ namespace CustomControl.ViewModel
         private Visibility show;
 
         [ObservableProperty]
+        private bool isExpanded;
+
+        [ObservableProperty]
         private List<TreeViewItemViewModel> nodes;
 
         [ObservableProperty]
@@ -323,6 +381,7 @@ namespace CustomControl.ViewModel
         {
             Show = Visibility.Visible;
             ShowButton = Visibility.Visible;
+            IsExpanded = true;
         }
     }
 }

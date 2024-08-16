@@ -431,7 +431,7 @@ namespace CustomControl.Control
         /// <param name="node">TreeView或者TreeViewItem</param>
         private void ScanTreeViewItems(ItemsControl node)
         {
-            if (node.Items != null && node.Items.Count > 0)
+            if (node != null && node.Items != null && node.Items.Count > 0)
             {
                 foreach (object obj in node.Items)
                 {

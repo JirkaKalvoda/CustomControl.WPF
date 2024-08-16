@@ -31,45 +31,56 @@
                 <Button Grid.Column="2" Margin="5" Content="搜索2" Command="{Binding Search2Command}" ToolTip="显示不符合的子项"></Button>
                 <Button Grid.Column="3" Margin="5" Content="清除搜索" Command="{Binding SearchClearCommand}"></Button>
             </Grid>
-            <TreeView Grid.Row="1" ItemsSource="{Binding Data}">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
-                        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
-                        </DockPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="TreeViewItem" >
-                        <!--Resources不支持Binding-->
-                        <Style.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"></SolidColorBrush>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="GreenYellow"></SolidColorBrush>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <!--无效-->
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="Red"></Setter>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter Property="Background" Value="White"></Setter>
-                            </Trigger>
-                            <!--有效-->
-                            <!--<Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="Red"></Setter>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Background" Value="Green"></Setter>
-                            </Trigger>-->
-                        </Style.Triggers>
-                        <Setter Property="IsExpanded" Value="True"/>
-                        <Setter Property="Visibility" Value="{Binding Show}"></Setter>
-                        <!--禁止双击折叠/展开，但是防不住4连击-->
-                        <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_OnMouseDoubleClick"></EventSetter>
-                    </Style>
-                </TreeView.ItemContainerStyle>
-            </TreeView>
+            <Grid Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="24"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Name="G_tvLeft"></Grid>
+                    <TreeView Grid.Column="1" ItemsSource="{Binding Data}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="24">
+                                    <!--<Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>-->
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
+                                </DockPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem" >
+                                <!--Resources不支持Binding-->
+                                <Style.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"></SolidColorBrush>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="GreenYellow"></SolidColorBrush>
+                                </Style.Resources>
+                                <Style.Triggers>
+                                    <!--无效-->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="Red"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="White"></Setter>
+                                    </Trigger>
+                                    <!--有效-->
+                                    <!--<Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Red"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="Green"></Setter>
+                                    </Trigger>-->
+                                </Style.Triggers>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                <Setter Property="Visibility" Value="{Binding Show}"></Setter>
+                                <!--禁止双击折叠/展开，但是防不住4连击-->
+                                <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_OnMouseDoubleClick"></EventSetter>
+                                <EventSetter Event="Collapsed" Handler="TreeViewItem_OnCollapsed"></EventSetter>
+                                <EventSetter Event="Expanded" Handler="TreeViewItem_OnExpanded"></EventSetter>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </TreeView>
+                </Grid>
+            </Grid>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -95,7 +106,7 @@
                 </local:TreeViewMultiSelect.SelectedItemStyle>-->
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
-                        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="24">
                             <Button Height="20" Width="20" Visibility="{Binding ShowButton}"></Button>
                             <TextBlock VerticalAlignment="Center" Text="{Binding TextTranslate}"></TextBlock>
                         </DockPanel>
